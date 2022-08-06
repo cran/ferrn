@@ -7,13 +7,12 @@
 
 [![R build
 status](https://github.com/huizezhang-sherry/ferrn/workflows/R-CMD-check/badge.svg)](https://github.com/huizezhang-sherry/ferrn/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/huizezhang-sherry/ferrn/branch/master/graph/badge.svg)](https://codecov.io/gh/huizezhang-sherry/ferrn?branch=master)
 <!-- badges: end -->
 
 The **ferrn** package extracts key components in the data object
 collected by the guided tour optimisation, and produces diagnostic
-plots.
+plots. An associated paper can be found at
+<https://journal.r-project.org/archive/2021/RJ-2021-105/index.html>.
 
 ## Installation
 
@@ -27,6 +26,21 @@ remotes::install_github("huizezhang-sherry/ferrn")
 
 ## Usage
 
+To extract the data object from a guided tour, assign the
+`annimate_xx()` function a name:
+
+``` r
+set.seed(123456)
+holes_1d_better <- animate_dist(
+  ferrn::boa5,
+  tour_path = guided_tour(holes(), d = 1,
+                          search_f =  search_better), 
+  rescale = FALSE)
+```
+
+The above code will collect data from the 1D animation on `boa5`
+dataset, a simulated data in the `ferrn` package.
+
 The best projection basis found by the projection pursuit algorithm can
 be extracted via
 
@@ -34,10 +48,10 @@ be extracted via
 library(ferrn)
 library(dplyr)
 holes_1d_better %>% get_best()
-#> # A tibble: 1 x 8
-#>   basis             index_val info          method       alpha tries  loop    id
-#>   <list>                <dbl> <chr>         <chr>        <dbl> <dbl> <dbl> <int>
-#> 1 <dbl[,1] [5 × 1]>     0.914 interpolation search_bett…    NA     5     6    55
+#> # A tibble: 1 × 8
+#>   basis         index_val info          method        alpha tries  loop    id
+#>   <list>            <dbl> <chr>         <chr>         <dbl> <dbl> <dbl> <int>
+#> 1 <dbl [5 × 1]>     0.914 interpolation search_better    NA     5     6    55
 holes_1d_better %>% get_best() %>% pull(basis) %>% .[[1]]
 #>              [,1]
 #> [1,]  0.005468276
@@ -83,8 +97,7 @@ bind_rows(holes_1d_geo, holes_1d_better) %>%
                      point_size = 2, end_size = 5)
 ```
 
-<p align="center">
-
+<p float="center">
 <img src="man/figures/tour.gif">
 
 </p>
