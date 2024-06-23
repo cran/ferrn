@@ -4,7 +4,14 @@
 \alias{add_theo}
 \title{A ggproto for drawing the theoretical basis, if applicable}
 \usage{
-add_theo(dt, theo_label = "*", theo_size = 25, theo_alpha = 0.8, ...)
+add_theo(
+  dt,
+  theo_label = "*",
+  theo_size = 25,
+  theo_alpha = 0.8,
+  theo_color = "#000000",
+  ...
+)
 }
 \arguments{
 \item{dt}{A data object from the running the optimisation algorithm in guided tour}
@@ -14,6 +21,8 @@ add_theo(dt, theo_label = "*", theo_size = 25, theo_alpha = 0.8, ...)
 \item{theo_size}{numeric; the size of the theoretical point}
 
 \item{theo_alpha}{numeric; the alpha of the theoretical point}
+
+\item{theo_color}{character; the colour of the theoretical point in hex}
 
 \item{...}{other aesthetics inherent from \code{explore_space_pca()}}
 }
@@ -30,8 +39,8 @@ Other draw functions:
 \code{\link{add_anno}()},
 \code{\link{add_dir_search}()},
 \code{\link{add_end}()},
-\code{\link{add_interp_last}()},
 \code{\link{add_interp}()},
+\code{\link{add_interp_last}()},
 \code{\link{add_interrupt}()},
 \code{\link{add_search}()},
 \code{\link{add_space}()},

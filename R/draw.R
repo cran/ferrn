@@ -52,16 +52,11 @@ add_space <- function(dt, space_alpha = 0.5, space_fill = "grey92", space_color 
 #' library(ggplot2)
 #' # construct the space and start df for plotting
 #' space <- tibble::tibble(x0 = 0, y0 = 0, r = 5)
-#' start <- holes_1d_geo %>%
+#' holes_1d_geo %>%
 #'   compute_pca() %>%
 #'   purrr::pluck("aug") %>%
 #'   clean_method() %>%
 #'   get_start()
-#' ggplot() +
-#'   add_space(dt = space) +
-#'   add_start(dt = start, start_color = info) +
-#'   theme_void() +
-#'   theme(aspect.ratio = 1)
 #' @family draw functions
 #' @export
 add_start <- function(dt, start_size = 5, start_alpha = 1, start_color = NULL, ...) {
@@ -221,7 +216,8 @@ add_interp <- function(dt, interp_size = 1.5, interp_alpha = NULL,
 #' @family draw functions
 #' @export
 add_interrupt <- function(dt, interrupt_size = 0.5, interrupt_alpha = NULL,
-                          interrupt_color = NULL, interrupt_group = NULL, interrupt_linetype = "dashed", ...) {
+                          interrupt_color = NULL, interrupt_group = NULL,
+                          interrupt_linetype = "dashed", ...) {
   ggplot2::geom_path(
     data = dt,
     ggplot2::aes(
@@ -264,14 +260,16 @@ add_anno <- function(dt, anno_color = "black", anno_lty = "dashed", anno_alpha =
 #' @param theo_label character; a symbol to label the theoretical point
 #' @param theo_size numeric; the size of the theoretical point
 #' @param theo_alpha numeric; the alpha of the theoretical point
+#' @param theo_color character; the colour of the theoretical point in hex
 #' @param ... other aesthetics inherent from \code{explore_space_pca()}
 #' @return a wrapper for drawing theoretical points in \code{explore_space_pca()}
 #' @family draw functions
 #' @export
-add_theo <- function(dt, theo_label = "*", theo_size = 25, theo_alpha = 0.8, ...) {
+add_theo <- function(dt, theo_label = "*", theo_size = 25, theo_alpha = 0.8,
+                     theo_color = "#000000", ...) {
   ggplot2::geom_text(
     data = dt,
     ggplot2::aes(x = .data$PC1, y = .data$PC2),
-    label = theo_label, size = theo_size, alpha = theo_alpha
+    label = theo_label, size = theo_size, alpha = theo_alpha, color = theo_color
   )
 }

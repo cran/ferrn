@@ -9,10 +9,9 @@
 status](https://github.com/huizezhang-sherry/ferrn/workflows/R-CMD-check/badge.svg)](https://github.com/huizezhang-sherry/ferrn/actions)
 <!-- badges: end -->
 
-The **ferrn** package extracts key components in the data object
-collected by the guided tour optimisation, and produces diagnostic
-plots. An associated paper can be found at
-<https://journal.r-project.org/archive/2021/RJ-2021-105/index.html>.
+The **ferrn** package extracts key components from the data object
+collected during projection pursuit (PP) guided tour optimisation,
+produces diagnostic plots, and calculates PP index scores.
 
 ## Installation
 
@@ -24,25 +23,31 @@ You can install the development version of ferrn from
 remotes::install_github("huizezhang-sherry/ferrn")
 ```
 
-## Usage
+## Visualise PP optimisation
 
-To extract the data object from a guided tour, assign the
-`annimate_xx()` function a name:
+The data object collected during a PP optimisation can be obtained by
+assigning the `tourr::annimate_xx()` function a name. In the following
+example, the projection pursuit is finding the best projection basis
+that can detect multi-modality for the `boa5` dataset using the
+`holes()` index function and the optimiser `search_better`:
 
 ``` r
 set.seed(123456)
 holes_1d_better <- animate_dist(
   ferrn::boa5,
-  tour_path = guided_tour(holes(), d = 1,
-                          search_f =  search_better), 
+  tour_path = guided_tour(holes(), d = 1, search_f =  search_better), 
   rescale = FALSE)
+holes_1d_better
 ```
 
-The above code will collect data from the 1D animation on `boa5`
-dataset, a simulated data in the `ferrn` package.
+The data structure includes the `basis` sampled by the optimiser, their
+corresponding index values (`index_val`), an `information` tag
+explaining the optimisation states, and the optimisation `method` used
+(`search_better`). The variables `tries` and `loop` describe the number
+of iterations and samples in the optimisation process, respectively. The
+variable `id` serves as the global identifier.
 
-The best projection basis found by the projection pursuit algorithm can
-be extracted via
+The best projection basis can be extracted via
 
 ``` r
 library(ferrn)
@@ -63,8 +68,7 @@ holes_1d_better %>% get_best() %>% pull(index_val)
 #> [1] 0.9136095
 ```
 
-Trace plot for viewing the optimisation progression with botanical
-palette:
+The trace plot can be used to view the optimisation progression:
 
 ``` r
 holes_1d_better %>% 
@@ -74,8 +78,13 @@ holes_1d_better %>%
 
 <img src="man/figures/README-trace-plot-1.png" width="100%" />
 
-Compare two algorithms via plotting the projection bases on the reduced
-PCA space:
+Different optimisers can be compared by plotting their projection bases
+on the reduced PCA space. Here `holes_1d_geo` is the data obtained from
+the same PP problem as `holes_1d_better` introduced above, but with a
+`search_geodesic` optimiser. The 5 $\times$ 1 bases from the two
+datasets are first reduced to 2D via PCA, and then plotted to the PCA
+space. (PP bases are ortho-normal and the space for $n \times 1$ bases
+is an $n$-d sphere, hence a circle when projected into 2D.)
 
 ``` r
 bind_rows(holes_1d_geo, holes_1d_better) %>%
@@ -87,7 +96,8 @@ bind_rows(holes_1d_geo, holes_1d_better) %>%
 
 <img src="man/figures/README-pca-plot-1.png" width="100%" />
 
-View the projection bases on its original 5-D space via tour animation:
+The same set of bases can be visualised in the original 5-D space via
+tour animation:
 
 ``` r
 bind_rows(holes_1d_geo, holes_1d_better) %>%
@@ -99,5 +109,16 @@ bind_rows(holes_1d_geo, holes_1d_better) %>%
 
 <p float="center">
 <img src="man/figures/tour.gif">
-
 </p>
+<!-- ## Calculate PP index scores -->
+<!-- Properties of PP index described in @laa_using_2020s includes smoothness, squintability, flexibility, rotation invariance, and speed. Here implementations are provided to calculate smoothness and squintability scores.  -->
+<!-- ```{r} -->
+<!-- # define the holes index as per tourr::holes -->
+<!-- holes <- tourr::holes -->
+<!-- basis_smoothness <- sample_bases(idx = "holes") -->
+<!-- calc_smoothness(basis_smoothness) -->
+<!-- basis_squint <- sample_bases(idx = "holes", n_basis = 100, step_size = 0.01, min_proj_dist = 1.5) -->
+<!-- calc_squintability(basis_squint, method = "ks", bin_width = 0.01) -->
+<!-- ``` -->
+
+# Reference
